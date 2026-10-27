@@ -136,7 +136,6 @@ summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
         <span class="note" id="importMsg" role="status"></span>
       </div>
     </div>
-    <div class="panel example" id="exampleBox" aria-label="Beispiel-Auswertung"></div>
   </section>
 
   <section id="quiz" class="panel" hidden>
@@ -164,6 +163,28 @@ const STATE_KEY = "berufskompass-state-v1";
 
 let CONFIG = null, AXES = [], QUESTIONS = [], MAX = {};
 let answers = [], current = 0;
+let runTimestamp = null;
+
+// Google-Forms-Logging: Antworten werden anonym als Formular-Submit gesendet.
+// Felder: Timestamp (Start der Befragung, einheitlich pro Durchlauf), Frage-Nr, Frage, Antwort.
+const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSc_L_fTdbfz-oEzrfgiNSJxuXCJLykTNIMj68eAtwMkpRiM-A/formResponse";
+const FORM_FIELDS = {
+  timestamp: "entry.289662510",
+  nr: "entry.1668896336",
+  frage: "entry.166796889",
+  antwort: "entry.1158378304"
+};
+
+function logToForm(nr, frage, antwort) {
+  try {
+    const body = new URLSearchParams();
+    body.set(FORM_FIELDS.timestamp, runTimestamp || "");
+    body.set(FORM_FIELDS.nr, String(nr));
+    body.set(FORM_FIELDS.frage, frage);
+    body.set(FORM_FIELDS.antwort, antwort);
+    fetch(FORM_ACTION, { method: "POST", mode: "no-cors", body });
+  } catch (e) { /* Logging darf die App nie blockieren */ }
+}
 
 async function loadConfig() {
   const custom = localStorage.getItem(STORAGE_KEY);
@@ -204,12 +225,11 @@ function applyConfig(cfg) {
 
   answers = new Array(QUESTIONS.length).fill(null);
   current = 0;
-  renderExample();
 }
 
 function show(id) { ["intro", "quiz", "result"].forEach(s => { $(s).hidden = s !== id; }); window.scrollTo({ top: 0 }); }
 
-function save() { try { localStorage.setItem(STATE_KEY, JSON.stringify({ answers, current })); } catch (e) {} }
+function save() { try { localStorage.setItem(STATE_KEY, JSON.stringify({ answers, current, runTimestamp })); } catch (e) {} }
 function loadState() { try { const d = JSON.parse(localStorage.getItem(STATE_KEY) || "null"); if (d && Array.isArray(d.answers) && d.answers.length === QUESTIONS.length) return d; } catch (e) {} return null; }
 function clearSave() { try { localStorage.removeItem(STATE_KEY); } catch (e) {} }
 
@@ -239,6 +259,8 @@ function renderQuestion() {
 function choose(i) {
   answers[current] = i;
   save();
+  const q = QUESTIONS[current];
+  logToForm(q.nr, q.text, q.options[i].label);
   [...$("qOpts").children].forEach((b, j) => b.setAttribute("aria-checked", j === i ? "true" : "false"));
   setTimeout(() => {
     if (current < QUESTIONS.length - 1) { current++; save(); renderQuestion(); }
@@ -289,6 +311,12 @@ function summaryText(res) {
 
 function renderResult() {
   const res = scores(answers);
+  res.forEach((r, i) => {
+    r.top.forEach(x => {
+      const name = r.ax.cats[x.k][0];
+      logToForm(i + 1, name, `${x.pct}%`);
+    });
+  });
   $("qBar").style.width = "100%";
   $("result").innerHTML = `
     <div class="panel">
@@ -320,18 +348,17 @@ function renderResult() {
       .catch(() => { const a = $("copyArea"); a.hidden = false; a.value = txt; a.select(); $("copyMsg").textContent = "Text markiert – mit Strg+C kopieren."; });
   });
   $("editBtn").addEventListener("click", () => { current = 0; renderQuestion(); show("quiz"); });
-  $("restartBtn").addEventListener("click", () => { answers = new Array(QUESTIONS.length).fill(null); current = 0; clearSave(); renderQuestion(); show("quiz"); });
+  $("restartBtn").addEventListener("click", () => { answers = new Array(QUESTIONS.length).fill(null); current = 0; runTimestamp = new Date().toISOString(); clearSave(); renderQuestion(); show("quiz"); });
 }
 
-function renderExample() {
-  if (!QUESTIONS.length) return;
-  const sample = QUESTIONS.map((q, i) => Math.min(i % q.options.length, q.options.length - 1));
-  const res = scores(sample);
-  $("exampleBox").innerHTML = `<p class="note">So sieht eine Auswertung aus (Beispielantworten):</p>` +
-    res.map(r => axisHTML(r, true)).join("");
+function startQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  current = 0;
+  runTimestamp = new Date().toISOString();
+  clearSave();
+  renderQuestion();
+  show("quiz");
 }
-
-function startQuiz() { answers = new Array(QUESTIONS.length).fill(null); current = 0; clearSave(); renderQuestion(); show("quiz"); }
 
 function wireIntro() {
   $("startBtn").addEventListener("click", startQuiz);
@@ -348,6 +375,7 @@ function wireIntro() {
     $("resumeBtn").textContent = `Fortsetzen (Frage ${Math.min(saved.current + 1, QUESTIONS.length)} von ${QUESTIONS.length})`;
     $("resumeBtn").addEventListener("click", () => {
       answers = saved.answers; current = Math.min(saved.current, QUESTIONS.length - 1);
+      runTimestamp = saved.runTimestamp || new Date().toISOString();
       if (answers.every(a => a !== null)) { renderResult(); show("result"); } else { renderQuestion(); show("quiz"); }
     });
   }
