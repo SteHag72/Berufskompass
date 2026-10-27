@@ -1,0 +1,989 @@
+{
+  "meta": {
+    "title": "Berufskompass",
+    "tag": "Orientierung für den Berufsstart",
+    "intro": "24 Fragen, jeweils eine Antwort. Am Ende siehst du deine zwei bis drei stärksten Richtungen mit Prozentwerten, auf drei Achsen.",
+    "durationNote": "Dauer etwa 6 Minuten. Es gibt keine falschen Antworten – wähle, was am ehesten auf dich zutrifft, nicht was gut klingt."
+  },
+  "axes": [
+    {
+      "id": "roles",
+      "title": "Beschäftigungsform",
+      "color": "var(--axis1)",
+      "categories": {
+        "U": [
+          "Unternehmer/in",
+          "Eigene Ideen umsetzen, wirtschaftliches Risiko tragen, einen Betrieb aufbauen und Mitarbeiter führen."
+        ],
+        "A": [
+          "Angestellte Fachkraft",
+          "Fachlich gute Arbeit im festen Team, mit klaren Aufgaben, verlässlichem Gehalt und geregelter Zeit."
+        ],
+        "B": [
+          "Beamter/in & öffentlicher Dienst",
+          "Sicherheit, klare Regeln und Arbeit für das Gemeinwohl – in Verwaltung, Polizei, Schule oder Justiz."
+        ],
+        "M": [
+          "Manager/in & Führungskraft",
+          "Teams leiten, Ziele setzen, Entscheidungen treffen und Verantwortung für Ergebnisse tragen."
+        ],
+        "W": [
+          "Wissenschaftler/in",
+          "Forschen, analysieren und neues Wissen schaffen – an Hochschulen, Instituten oder in Entwicklungsabteilungen."
+        ],
+        "F": [
+          "Freiberufler/in & Experte/in",
+          "Mit eigenem Fachwissen für wechselnde Kunden arbeiten, frei in der Zeiteinteilung, ohne großen Betrieb."
+        ]
+      }
+    },
+    {
+      "id": "sectors",
+      "title": "Umfeld & Branche",
+      "color": "var(--axis2)",
+      "categories": {
+        "hw": [
+          "Handwerksbetrieb",
+          "Kleiner bis mittlerer Betrieb, praktische Arbeit, sichtbare Ergebnisse, kurze Wege zum Chef."
+        ],
+        "ind": [
+          "Industrie & Produktion",
+          "Größere Unternehmen, Technik und Abläufe, Produkte in Serie, viele Fach- und Aufstiegswege."
+        ],
+        "beh": [
+          "Behörde & Verwaltung",
+          "Ämter, Ministerien, Kommunen: Recht anwenden, Anträge bearbeiten, Abläufe für Bürger sichern."
+        ],
+        "inst": [
+          "Institutionen & Gemeinnütziges",
+          "Verbände, Stiftungen, Kirchen, soziale Träger und Kammern – Arbeit mit gesellschaftlichem Auftrag."
+        ],
+        "hs": [
+          "Hochschule & Forschung",
+          "Universitäten, Forschungsinstitute, Labore – Wissen erarbeiten und weitergeben."
+        ],
+        "dl": [
+          "Dienstleistung, Handel & Beratung",
+          "Kunden betreuen, verkaufen, beraten – von Bank und Versicherung bis Handel und Agentur."
+        ],
+        "it": [
+          "IT, Digitales & Medien",
+          "Software, Daten, Design und Medien – oft projektbasiert und schnell im Wandel."
+        ],
+        "ges": [
+          "Gesundheit & Pflege",
+          "Medizin, Therapie und Pflege – direkte Arbeit mit und für Menschen."
+        ]
+      }
+    },
+    {
+      "id": "themes",
+      "title": "Interessen (Holland-Modell)",
+      "color": "var(--axis3)",
+      "categories": {
+        "R": [
+          "Technik & Praxis",
+          "Mit Händen, Werkzeugen und Maschinen arbeiten; Ergebnisse, die man anfassen kann.",
+          "R"
+        ],
+        "I": [
+          "Forschen & Analysieren",
+          "Zusammenhänge verstehen, Probleme logisch lösen, Daten und Fakten prüfen.",
+          "I"
+        ],
+        "K": [
+          "Gestalten & Kreatives",
+          "Ideen ausdrücken – in Bild, Text, Musik, Form oder Design.",
+          "A"
+        ],
+        "S": [
+          "Menschen & Helfen",
+          "Beraten, betreuen, unterrichten, pflegen – für andere da sein.",
+          "S"
+        ],
+        "E": [
+          "Führen & Verkaufen",
+          "Überzeugen, verhandeln, Projekte vorantreiben und Verantwortung übernehmen.",
+          "E"
+        ],
+        "C": [
+          "Ordnen & Verwalten",
+          "Strukturieren, planen, dokumentieren; sorgfältig und mit Überblick arbeiten.",
+          "C"
+        ]
+      }
+    }
+  ],
+  "questions": [
+    {
+      "nr": 1,
+      "section": "Arbeitsweise & Werte",
+      "text": "Was ist dir bei einer Stelle am wichtigsten?",
+      "options": [
+        {
+          "label": "Sicherheit und ein planbarer Lebensweg",
+          "weights": {
+            "B": 2,
+            "A": 1
+          }
+        },
+        {
+          "label": "Möglichst viel selbst entscheiden zu können",
+          "weights": {
+            "U": 2,
+            "F": 1
+          }
+        },
+        {
+          "label": "Aufzusteigen und Verantwortung für andere zu übernehmen",
+          "weights": {
+            "M": 2,
+            "E": 1
+          }
+        },
+        {
+          "label": "Einer Frage wirklich auf den Grund zu gehen",
+          "weights": {
+            "W": 2,
+            "I": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 2,
+      "section": "Arbeitsweise & Werte",
+      "text": "Wie gehst du mit Risiko um?",
+      "options": [
+        {
+          "label": "Ich gehe kalkulierte Risiken ein, wenn sich eine Chance bietet",
+          "weights": {
+            "U": 2,
+            "M": 1
+          }
+        },
+        {
+          "label": "Ich wäge lange ab und riskiere nur mit gutem Grund etwas",
+          "weights": {
+            "A": 1,
+            "W": 1
+          }
+        },
+        {
+          "label": "Ich mag es, wenn klar geregelt ist, was passiert",
+          "weights": {
+            "B": 2,
+            "C": 1
+          }
+        },
+        {
+          "label": "Risiko stört mich nicht, solange ich mein Fachgebiet beherrsche",
+          "weights": {
+            "F": 2
+          }
+        }
+      ]
+    },
+    {
+      "nr": 3,
+      "section": "Arbeitsweise & Werte",
+      "text": "Dein Einkommen soll …",
+      "options": [
+        {
+          "label": "fest und verlässlich sein – auch noch mit 60",
+          "weights": {
+            "B": 2,
+            "A": 1
+          }
+        },
+        {
+          "label": "von meinem Erfolg abhängen und nach oben offen sein",
+          "weights": {
+            "U": 2,
+            "F": 1
+          }
+        },
+        {
+          "label": "mit Verantwortung und Position wachsen",
+          "weights": {
+            "M": 2,
+            "A": 1
+          }
+        },
+        {
+          "label": "zweitrangig sein, solange die Arbeit spannend ist",
+          "weights": {
+            "W": 2,
+            "inst": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 4,
+      "section": "Arbeitsweise & Werte",
+      "text": "Wie arbeitest du am liebsten?",
+      "options": [
+        {
+          "label": "Allein und konzentriert an einer kniffligen Aufgabe",
+          "weights": {
+            "W": 2,
+            "F": 1,
+            "I": 1
+          }
+        },
+        {
+          "label": "Im eingespielten Team mit klaren Rollen",
+          "weights": {
+            "A": 2,
+            "B": 1
+          }
+        },
+        {
+          "label": "Als Kopf eines Teams, das ich anleite",
+          "weights": {
+            "M": 2,
+            "U": 1
+          }
+        },
+        {
+          "label": "Mit wechselnden Kunden und Projekten",
+          "weights": {
+            "F": 2,
+            "U": 1,
+            "dl": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 5,
+      "section": "Arbeitsweise & Werte",
+      "text": "Regeln und Vorschriften …",
+      "options": [
+        {
+          "label": "geben mir Halt – ich halte mich gern daran",
+          "weights": {
+            "B": 2,
+            "C": 1
+          }
+        },
+        {
+          "label": "sind in Ordnung, solange sie sinnvoll sind",
+          "weights": {
+            "A": 2
+          }
+        },
+        {
+          "label": "sollte man hinterfragen und verbessern",
+          "weights": {
+            "W": 1,
+            "M": 1,
+            "U": 1
+          }
+        },
+        {
+          "label": "stelle ich am liebsten selbst auf",
+          "weights": {
+            "U": 2,
+            "M": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 6,
+      "section": "Arbeitsweise & Werte",
+      "text": "Ein Projekt läuft schief. Was tust du?",
+      "options": [
+        {
+          "label": "Ich übernehme das Ruder und verteile die Aufgaben neu",
+          "weights": {
+            "M": 2,
+            "E": 1
+          }
+        },
+        {
+          "label": "Ich suche die Ursache, bis ich sie verstanden habe",
+          "weights": {
+            "W": 2,
+            "I": 1
+          }
+        },
+        {
+          "label": "Ich erledige meinen Teil weiter zuverlässig und gründlich",
+          "weights": {
+            "A": 2,
+            "B": 1
+          }
+        },
+        {
+          "label": "Ich sehe darin die Chance für einen ganz neuen Ansatz",
+          "weights": {
+            "U": 2,
+            "K": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 7,
+      "section": "Arbeitsweise & Werte",
+      "text": "Wie wichtig ist dir eine geregelte Arbeitszeit?",
+      "options": [
+        {
+          "label": "Sehr wichtig – Feierabend ist Feierabend",
+          "weights": {
+            "B": 2,
+            "A": 1
+          }
+        },
+        {
+          "label": "Wichtig, aber in Spitzenzeiten sind Überstunden okay",
+          "weights": {
+            "A": 1,
+            "M": 1
+          }
+        },
+        {
+          "label": "Egal, wenn ich mir die Zeit selbst einteilen kann",
+          "weights": {
+            "F": 2,
+            "U": 1,
+            "W": 1
+          }
+        },
+        {
+          "label": "Ich arbeite, bis die Sache steht",
+          "weights": {
+            "U": 2,
+            "M": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 8,
+      "section": "Arbeitsweise & Werte",
+      "text": "Wofür möchtest du später bekannt sein?",
+      "options": [
+        {
+          "label": "Für ein Unternehmen, das ich aufgebaut habe",
+          "weights": {
+            "U": 2,
+            "E": 1
+          }
+        },
+        {
+          "label": "Als Experte, den man um Rat fragt",
+          "weights": {
+            "F": 2,
+            "W": 1
+          }
+        },
+        {
+          "label": "Für eine Entdeckung oder neue Erkenntnis",
+          "weights": {
+            "W": 2,
+            "I": 1
+          }
+        },
+        {
+          "label": "Dafür, dass auf mich immer Verlass war",
+          "weights": {
+            "B": 2,
+            "A": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 9,
+      "section": "Arbeitsweise & Werte",
+      "text": "Verantwortung für andere Menschen …",
+      "options": [
+        {
+          "label": "übernehme ich gern – ich führe",
+          "weights": {
+            "M": 2
+          }
+        },
+        {
+          "label": "trage ich für meine Kunden, nicht für Mitarbeiter",
+          "weights": {
+            "F": 2,
+            "dl": 1
+          }
+        },
+        {
+          "label": "überlasse ich lieber anderen; ich konzentriere mich auf meine Aufgabe",
+          "weights": {
+            "A": 2,
+            "W": 1
+          }
+        },
+        {
+          "label": "trage ich für das Gemeinwohl",
+          "weights": {
+            "B": 2,
+            "S": 1,
+            "inst": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 10,
+      "section": "Arbeitsweise & Werte",
+      "text": "Welcher Satz klingt am meisten nach dir?",
+      "options": [
+        {
+          "label": "„Ich mache mein eigenes Ding.“",
+          "weights": {
+            "U": 2,
+            "F": 1
+          }
+        },
+        {
+          "label": "„Ich will verstehen, wie es funktioniert.“",
+          "weights": {
+            "W": 2,
+            "I": 1
+          }
+        },
+        {
+          "label": "„Ich organisiere, damit es läuft.“",
+          "weights": {
+            "M": 1,
+            "B": 1,
+            "C": 1
+          }
+        },
+        {
+          "label": "„Ich packe an und mache es fertig.“",
+          "weights": {
+            "A": 2,
+            "R": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 11,
+      "section": "Umfeld & Branche",
+      "text": "In welchem Umfeld fühlst du dich am wohlsten?",
+      "options": [
+        {
+          "label": "In Werkstatt oder auf der Baustelle",
+          "weights": {
+            "hw": 2,
+            "R": 1
+          }
+        },
+        {
+          "label": "In Werkhalle, Labor oder einem großen Betrieb",
+          "weights": {
+            "ind": 2,
+            "R": 1
+          }
+        },
+        {
+          "label": "Im Büro mit Akten, Anträgen und festen Abläufen",
+          "weights": {
+            "beh": 2,
+            "C": 1
+          }
+        },
+        {
+          "label": "Unterwegs bei Kunden und Partnern",
+          "weights": {
+            "dl": 2,
+            "E": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 12,
+      "section": "Umfeld & Branche",
+      "text": "Wie groß soll dein Arbeitgeber sein?",
+      "options": [
+        {
+          "label": "Klein und familiär – jeder kennt jeden",
+          "weights": {
+            "hw": 2,
+            "U": 1
+          }
+        },
+        {
+          "label": "Ein großer Konzern mit vielen Möglichkeiten",
+          "weights": {
+            "ind": 2,
+            "M": 1
+          }
+        },
+        {
+          "label": "Eine Behörde oder öffentliche Einrichtung",
+          "weights": {
+            "beh": 2,
+            "B": 1
+          }
+        },
+        {
+          "label": "Eine Uni, Stiftung oder ein Verband",
+          "weights": {
+            "hs": 1,
+            "inst": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 13,
+      "section": "Umfeld & Branche",
+      "text": "Was soll am Ende deiner Arbeit stehen?",
+      "options": [
+        {
+          "label": "Etwas Gebautes oder Repariertes, das man anfassen kann",
+          "weights": {
+            "hw": 2,
+            "R": 2
+          }
+        },
+        {
+          "label": "Ein Produkt, das in Serie geht",
+          "weights": {
+            "ind": 2,
+            "R": 1
+          }
+        },
+        {
+          "label": "Ein Mensch, dem geholfen wurde",
+          "weights": {
+            "ges": 2,
+            "S": 2
+          }
+        },
+        {
+          "label": "Eine Software, ein Text oder ein Design",
+          "weights": {
+            "it": 2,
+            "K": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 14,
+      "section": "Umfeld & Branche",
+      "text": "Welches Thema verfolgst du freiwillig in deiner Freizeit?",
+      "options": [
+        {
+          "label": "Technik, Maschinen, Fahrzeuge",
+          "weights": {
+            "R": 2,
+            "ind": 1
+          }
+        },
+        {
+          "label": "Computer, Apps, Internet",
+          "weights": {
+            "it": 2,
+            "I": 1
+          }
+        },
+        {
+          "label": "Gesellschaft, Politik, Recht",
+          "weights": {
+            "beh": 1,
+            "inst": 1,
+            "S": 1
+          }
+        },
+        {
+          "label": "Natur, Medizin, Wissenschaft",
+          "weights": {
+            "hs": 2,
+            "I": 1,
+            "ges": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 15,
+      "section": "Umfeld & Branche",
+      "text": "Für wen möchtest du arbeiten?",
+      "options": [
+        {
+          "label": "Für Kunden, die für eine Leistung bezahlen",
+          "weights": {
+            "dl": 2,
+            "E": 1
+          }
+        },
+        {
+          "label": "Für die Allgemeinheit und den Staat",
+          "weights": {
+            "beh": 2,
+            "B": 1
+          }
+        },
+        {
+          "label": "Für Menschen in schwierigen Lebenslagen",
+          "weights": {
+            "inst": 2,
+            "S": 2
+          }
+        },
+        {
+          "label": "Für Patienten und Pflegebedürftige",
+          "weights": {
+            "ges": 2,
+            "S": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 16,
+      "section": "Umfeld & Branche",
+      "text": "Welche Aufgabe reizt dich am meisten?",
+      "options": [
+        {
+          "label": "Eine Heizungsanlage einbauen oder ein Dach sanieren",
+          "weights": {
+            "hw": 2,
+            "R": 1
+          }
+        },
+        {
+          "label": "Eine Produktionslinie effizienter machen",
+          "weights": {
+            "ind": 2,
+            "I": 1
+          }
+        },
+        {
+          "label": "Einen Antrag prüfen und rechtssicher entscheiden",
+          "weights": {
+            "beh": 2,
+            "C": 2
+          }
+        },
+        {
+          "label": "Eine Website oder App entwickeln",
+          "weights": {
+            "it": 2,
+            "K": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 17,
+      "section": "Umfeld & Branche",
+      "text": "Wie wichtig ist dir, dass deine Arbeit einen gesellschaftlichen Sinn hat?",
+      "options": [
+        {
+          "label": "Das Wichtigste überhaupt",
+          "weights": {
+            "inst": 2,
+            "ges": 1,
+            "S": 1
+          }
+        },
+        {
+          "label": "Wichtig, aber gutes Geld zählt auch",
+          "weights": {
+            "dl": 1,
+            "ind": 1
+          }
+        },
+        {
+          "label": "Den Sinn finde ich in guter Handarbeit",
+          "weights": {
+            "hw": 2
+          }
+        },
+        {
+          "label": "Sinn heißt für mich, Neues herauszufinden",
+          "weights": {
+            "hs": 2,
+            "W": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 18,
+      "section": "Umfeld & Branche",
+      "text": "Wo siehst du dich in zehn Jahren?",
+      "options": [
+        {
+          "label": "Mit eigenem Betrieb und Mitarbeitern",
+          "weights": {
+            "U": 2,
+            "hw": 1,
+            "E": 1
+          }
+        },
+        {
+          "label": "In leitender Position in einem Unternehmen",
+          "weights": {
+            "M": 2,
+            "ind": 1
+          }
+        },
+        {
+          "label": "Verbeamtet, mit sicherem Posten",
+          "weights": {
+            "B": 2,
+            "beh": 1
+          }
+        },
+        {
+          "label": "Mit Doktortitel in Forschung oder Lehre",
+          "weights": {
+            "W": 2,
+            "hs": 2
+          }
+        }
+      ]
+    },
+    {
+      "nr": 19,
+      "section": "Interessen & Begabungen",
+      "text": "Welches Schulfach lag dir am meisten?",
+      "options": [
+        {
+          "label": "Mathe oder Physik",
+          "weights": {
+            "I": 2,
+            "R": 1
+          }
+        },
+        {
+          "label": "Deutsch, Kunst oder Musik",
+          "weights": {
+            "K": 2
+          }
+        },
+        {
+          "label": "Wirtschaft, Politik oder Recht",
+          "weights": {
+            "E": 1,
+            "C": 1
+          }
+        },
+        {
+          "label": "Biologie, Ethik oder Religion",
+          "weights": {
+            "S": 2,
+            "ges": 1
+          }
+        },
+        {
+          "label": "Werken, Technik oder Sport",
+          "weights": {
+            "R": 2,
+            "hw": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 20,
+      "section": "Interessen & Begabungen",
+      "text": "Was fällt dir leicht?",
+      "options": [
+        {
+          "label": "Dinge mit den Händen bauen oder reparieren",
+          "weights": {
+            "R": 2,
+            "hw": 1
+          }
+        },
+        {
+          "label": "Komplizierte Zusammenhänge durchschauen",
+          "weights": {
+            "I": 2
+          }
+        },
+        {
+          "label": "Andere überzeugen und begeistern",
+          "weights": {
+            "E": 2,
+            "M": 1
+          }
+        },
+        {
+          "label": "Ordnung halten und den Überblick behalten",
+          "weights": {
+            "C": 2,
+            "A": 1
+          }
+        },
+        {
+          "label": "Anderen zuhören und sie unterstützen",
+          "weights": {
+            "S": 2
+          }
+        }
+      ]
+    },
+    {
+      "nr": 21,
+      "section": "Interessen & Begabungen",
+      "text": "Womit verbringst du gern mehrere Stunden am Stück?",
+      "options": [
+        {
+          "label": "Zeichnen, Schreiben, Musik oder Videos machen",
+          "weights": {
+            "K": 2,
+            "it": 1
+          }
+        },
+        {
+          "label": "Tüfteln, programmieren, ausprobieren",
+          "weights": {
+            "I": 1,
+            "R": 1,
+            "it": 1
+          }
+        },
+        {
+          "label": "Etwas planen und organisieren",
+          "weights": {
+            "C": 2,
+            "M": 1
+          }
+        },
+        {
+          "label": "Mit Freunden reden, helfen, jemanden betreuen",
+          "weights": {
+            "S": 2
+          }
+        }
+      ]
+    },
+    {
+      "nr": 22,
+      "section": "Interessen & Begabungen",
+      "text": "Bei einem Gruppenprojekt übernimmst du meistens …",
+      "options": [
+        {
+          "label": "die Leitung und Aufgabenverteilung",
+          "weights": {
+            "M": 2,
+            "E": 1
+          }
+        },
+        {
+          "label": "die Recherche und Faktenprüfung",
+          "weights": {
+            "I": 2,
+            "W": 1
+          }
+        },
+        {
+          "label": "die Gestaltung und Präsentation",
+          "weights": {
+            "K": 2
+          }
+        },
+        {
+          "label": "den Zeitplan und die Dokumentation",
+          "weights": {
+            "C": 2,
+            "B": 1
+          }
+        },
+        {
+          "label": "die praktische Umsetzung",
+          "weights": {
+            "R": 2,
+            "A": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 23,
+      "section": "Interessen & Begabungen",
+      "text": "Was würdest du am liebsten anderen vermitteln?",
+      "options": [
+        {
+          "label": "Ein eigenes Produkt, das ich verkaufe",
+          "weights": {
+            "E": 2,
+            "U": 1
+          }
+        },
+        {
+          "label": "Mein Wissen – als Trainer oder Berater",
+          "weights": {
+            "F": 2,
+            "S": 1,
+            "dl": 1
+          }
+        },
+        {
+          "label": "Gar nichts – Verkaufen liegt mir nicht",
+          "weights": {
+            "A": 1,
+            "I": 1
+          }
+        },
+        {
+          "label": "Eine Idee, für die ich Unterstützer suche",
+          "weights": {
+            "E": 1,
+            "K": 1,
+            "inst": 1
+          }
+        }
+      ]
+    },
+    {
+      "nr": 24,
+      "section": "Interessen & Begabungen",
+      "text": "Welche Nachricht würde dich am meisten freuen?",
+      "options": [
+        {
+          "label": "„Dein Entwurf hat den Wettbewerb gewonnen.“",
+          "weights": {
+            "K": 2
+          }
+        },
+        {
+          "label": "„Die Anlage läuft wieder – dank dir.“",
+          "weights": {
+            "R": 2
+          }
+        },
+        {
+          "label": "„Dein Umsatz hat sich verdoppelt.“",
+          "weights": {
+            "E": 2,
+            "U": 1
+          }
+        },
+        {
+          "label": "„Du hast der Familie wirklich geholfen.“",
+          "weights": {
+            "S": 2
+          }
+        },
+        {
+          "label": "„Deine Studie wird veröffentlicht.“",
+          "weights": {
+            "I": 2,
+            "W": 1,
+            "hs": 1
+          }
+        }
+      ]
+    }
+  ]
+}

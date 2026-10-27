@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Berufskompass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #f3f5f8; --surface: #ffffff; --ink: #18202e; --muted: #5b6577; --line: #d9dee7;
+  --accent: #2b55c9; --accent-soft: #e3e9fb; --warm: #c98a12;
+  --axis1: #2b55c9; --axis2: #1f8a74; --axis3: #b5651d; --track: #e6e9ef;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151d; --surface: #1a202b; --ink: #e8ecf3; --muted: #9aa4b6; --line: #2c3442;
+    --accent: #7d9bff; --accent-soft: #232f4d; --warm: #e5ad3d;
+    --axis1: #7d9bff; --axis2: #4cc3a6; --axis3: #e39a55; --track: #2a3140;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151d; --surface: #1a202b; --ink: #e8ecf3; --muted: #9aa4b6; --line: #2c3442;
+  --accent: #7d9bff; --accent-soft: #232f4d; --warm: #e5ad3d;
+  --axis1: #7d9bff; --axis2: #4cc3a6; --axis3: #e39a55; --track: #2a3140;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); margin: 0;
+  font-family: var(--font-body); font-size: 17px; line-height: 1.55;
+  padding: 28px 16px 56px;
+}
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 22px; }
+header.top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.tag { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.015em; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.1; font-weight: 800; }
+h2 { font-size: 1.45rem; line-height: 1.2; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+p { margin: 0; max-width: 65ch; }
+.lead { color: var(--muted); font-size: 1.05rem; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 16px; }
+.btn {
+  font: inherit; font-weight: 700; cursor: pointer; border-radius: 10px; padding: 12px 20px;
+  border: 1px solid var(--accent); background: var(--accent); color: var(--surface);
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 400; }
+.btn:focus-visible, .opt:focus-visible, a:focus-visible { outline: 3px solid var(--warm); outline-offset: 2px; }
+.btn:disabled { opacity: 0.4; cursor: default; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.fact { border-top: 3px solid var(--line); padding-top: 8px; display: grid; gap: 2px; }
+.fact b { font-family: var(--font-display); font-size: 1.05rem; }
+.fact span { color: var(--muted); font-size: 0.92rem; }
+.fact.a1 { border-color: var(--axis1); } .fact.a2 { border-color: var(--axis2); } .fact.a3 { border-color: var(--axis3); }
+@media (max-width: 560px) { .facts { grid-template-columns: 1fr; } }
+.progress { display: grid; gap: 6px; }
+.progress .meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--track); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s ease; }
+.section-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent); font-weight: 700; }
+.opts { display: grid; gap: 10px; }
+.opt {
+  font: inherit; text-align: left; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: center;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+}
+.opt:hover { border-color: var(--accent); }
+.opt .key { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
+.opt[aria-checked="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.opt[aria-checked="true"] .key { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.hint { font-size: 0.85rem; color: var(--muted); }
+.axis { display: grid; gap: 14px; }
+.axis-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.clarity { font-size: 0.8rem; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.winner { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 14px; align-items: baseline; }
+.winner .name { font-family: var(--font-display); font-weight: 700; font-size: 1.12rem; }
+.winner .pct { font-family: var(--font-mono); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.winner .desc { grid-column: 1 / -1; color: var(--muted); font-size: 0.95rem; }
+.winner .track { grid-column: 1 / -1; height: 10px; background: var(--track); border-radius: 99px; overflow: hidden; }
+.winner .track > i { display: block; height: 100%; border-radius: 99px; }
+.holland { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 6px; vertical-align: 2px; }
+details { border-top: 1px solid var(--line); padding-top: 10px; }
+summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
+.all { display: grid; gap: 6px; margin-top: 10px; }
+.all .r { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) 3.2rem; gap: 10px; align-items: center; font-size: 0.88rem; }
+.all .r .t { height: 6px; background: var(--track); border-radius: 99px; overflow: hidden; }
+.all .r .t > i { display: block; height: 100%; }
+.all .r .v { font-family: var(--font-mono); text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .all .r { grid-template-columns: minmax(0, 1fr) 3.2rem; } .all .r .t { grid-column: 1 / -1; grid-row: 2; } }
+.steps { display: grid; gap: 12px; padding: 0; margin: 0; list-style: none; }
+.steps li { display: grid; gap: 2px; }
+.steps a { color: var(--accent); font-weight: 700; }
+.note { font-size: 0.85rem; color: var(--muted); }
+.import-box { display: none; margin-top: 4px; }
+.import-box textarea { width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-family: var(--font-mono); font-size: 11px; padding: 10px; outline: none; resize: vertical; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="var(--accent)" stroke-width="2.5"/><path d="M16 5 L20 16 L16 27 L12 16 Z" fill="var(--accent)"/><path d="M16 16 L20 16 L16 27 Z" fill="var(--warm)"/></svg>
+      <span id="brandTitle">Berufskompass</span>
+    </div>
+    <span class="tag" id="brandTag">Orientierung für den Berufsstart</span>
+  </header>
+
+  <section id="intro" class="wrap" style="gap:22px">
+    <div class="panel">
+      <h1 id="introH1">Welche Arbeit passt zu dir?</h1>
+      <p class="lead" id="introLead"></p>
+      <div class="facts" id="introFacts"></div>
+      <p class="note" id="introNote"></p>
+      <div class="row">
+        <button class="btn" id="startBtn" type="button">Befragung starten</button>
+        <button class="btn ghost" id="resumeBtn" type="button" hidden>Fortsetzen</button>
+        <button class="btn ghost" id="toggleImport" type="button">Eigene Fragen laden …</button>
+      </div>
+      <div class="import-box" id="importBox">
+        <p class="note">Eigene config.json einfügen (Struktur siehe README) und importieren. Die laufende Befragung wird zurückgesetzt.</p>
+        <textarea id="importText" rows="4" placeholder='{"meta":{...},"axes":[...],"questions":[...]}'></textarea>
+        <div class="row" style="margin-top:6px">
+          <input type="file" id="importFile" accept="application/json" />
+          <button class="btn ghost" id="importBtn" type="button">Importieren</button>
+        </div>
+        <span class="note" id="importMsg" role="status"></span>
+      </div>
+    </div>
+    <div class="panel example" id="exampleBox" aria-label="Beispiel-Auswertung"></div>
+  </section>
+
+  <section id="quiz" class="panel" hidden>
+    <div class="progress">
+      <div class="meta"><span id="qCount"></span><span id="qSection"></span></div>
+      <div class="bar"><i id="qBar"></i></div>
+    </div>
+    <div class="section-label" id="qLabel"></div>
+    <h2 id="qText"></h2>
+    <div class="opts" id="qOpts" role="radiogroup" aria-labelledby="qText"></div>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn ghost" id="backBtn" type="button">Zurück</button>
+      <span class="hint">Tipp: Tasten 1–5 wählen eine Antwort</span>
+    </div>
+  </section>
+
+  <section id="result" hidden style="display:grid;gap:22px"></section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const DEFAULT_CONFIG_URL = "config.json";
+const STORAGE_KEY = "berufskompass-config-v1";
+const STATE_KEY = "berufskompass-state-v1";
+
+let CONFIG = null, AXES = [], QUESTIONS = [], MAX = {};
+let answers = [], current = 0;
+
+async function loadConfig() {
+  const custom = localStorage.getItem(STORAGE_KEY);
+  if (custom) {
+    try { return JSON.parse(custom); } catch (e) { /* fall through */ }
+  }
+  const res = await fetch(DEFAULT_CONFIG_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error("config.json konnte nicht geladen werden");
+  return await res.json();
+}
+
+function applyConfig(cfg) {
+  CONFIG = cfg;
+  AXES = cfg.axes.map(ax => ({ id: ax.id, title: ax.title, color: ax.color, cats: ax.categories }));
+  QUESTIONS = [...cfg.questions].sort((a, b) => a.nr - b.nr);
+
+  MAX = {};
+  QUESTIONS.forEach(q => {
+    const best = {};
+    q.options.forEach(opt => Object.entries(opt.weights || {}).forEach(([k, v]) => { best[k] = Math.max(best[k] || 0, v); }));
+    Object.entries(best).forEach(([k, v]) => { MAX[k] = (MAX[k] || 0) + v; });
+  });
+
+  $("brandTitle").textContent = cfg.meta?.title || "Berufskompass";
+  $("brandTag").textContent = cfg.meta?.tag || "";
+  $("introH1").textContent = `Welche Arbeit passt zu dir?`;
+  $("introLead").textContent = cfg.meta?.intro || "";
+  $("introNote").textContent = cfg.meta?.durationNote || "";
+  const facts = $("introFacts");
+  facts.innerHTML = "";
+  AXES.forEach((ax, i) => {
+    const d = document.createElement("div");
+    d.className = `fact a${(i % 3) + 1}`;
+    const names = Object.values(ax.cats).map(c => c[0]).join(", ");
+    d.innerHTML = `<b>${ax.title}</b><span>${names}</span>`;
+    facts.appendChild(d);
+  });
+
+  answers = new Array(QUESTIONS.length).fill(null);
+  current = 0;
+  renderExample();
+}
+
+function show(id) { ["intro", "quiz", "result"].forEach(s => { $(s).hidden = s !== id; }); window.scrollTo({ top: 0 }); }
+
+function save() { try { localStorage.setItem(STATE_KEY, JSON.stringify({ answers, current })); } catch (e) {} }
+function loadState() { try { const d = JSON.parse(localStorage.getItem(STATE_KEY) || "null"); if (d && Array.isArray(d.answers) && d.answers.length === QUESTIONS.length) return d; } catch (e) {} return null; }
+function clearSave() { try { localStorage.removeItem(STATE_KEY); } catch (e) {} }
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const N = QUESTIONS.length;
+  $("qCount").textContent = `Frage ${current + 1} von ${N}`;
+  $("qSection").textContent = q.section || "";
+  $("qLabel").textContent = q.section || "";
+  $("qText").textContent = q.text;
+  $("qBar").style.width = `${(current / N) * 100}%`;
+  $("backBtn").disabled = current === 0;
+  const box = $("qOpts");
+  box.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "opt"; b.id = `q${current}o${i}`;
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", answers[current] === i ? "true" : "false");
+    b.innerHTML = `<span class="key">${i + 1}</span><span></span>`;
+    b.lastChild.textContent = opt.label;
+    b.addEventListener("click", () => choose(i));
+    box.appendChild(b);
+  });
+}
+
+function choose(i) {
+  answers[current] = i;
+  save();
+  [...$("qOpts").children].forEach((b, j) => b.setAttribute("aria-checked", j === i ? "true" : "false"));
+  setTimeout(() => {
+    if (current < QUESTIONS.length - 1) { current++; save(); renderQuestion(); }
+    else { renderResult(); show("result"); }
+  }, 180);
+}
+
+function scores(ans) {
+  const raw = {};
+  ans.forEach((a, qi) => {
+    if (a === null) return;
+    Object.entries(QUESTIONS[qi].options[a].weights || {}).forEach(([k, v]) => { raw[k] = (raw[k] || 0) + v; });
+  });
+  return AXES.map(ax => {
+    const list = Object.keys(ax.cats).map(k => ({ k, fit: (raw[k] || 0) / (MAX[k] || 1) })).sort((a, b) => b.fit - a.fit);
+    const totalFit = list.reduce((s, x) => s + x.fit, 0) || 1;
+    list.forEach(x => { x.share = x.fit / totalFit; });
+    const n = list[2] && list[0].fit > 0 && list[2].fit / list[0].fit >= 0.7 ? 3 : 2;
+    const top = list.slice(0, n);
+    const sumTop = top.reduce((s, x) => s + x.fit, 0) || 1;
+    let pcts = top.map(x => Math.round((x.fit / sumTop) * 100));
+    pcts[0] += 100 - pcts.reduce((s, x) => s + x, 0);
+    top.forEach((x, i) => { x.pct = pcts[i]; });
+    const clarity = top[0].pct >= 50 ? "deutliche Tendenz" : top[0].pct >= 40 ? "erkennbare Tendenz" : "gemischtes Profil";
+    return { ax, top, list, clarity };
+  });
+}
+
+function axisHTML(r, example) {
+  const { ax, top, list, clarity } = r;
+  const tops = top.map(x => {
+    const [name, desc, holl] = ax.cats[x.k];
+    return `<div class="winner">
+      <span class="name">${name}${holl ? `<span class="holland">${holl}</span>` : ""}</span>
+      <span class="pct">${x.pct} %</span>
+      <span class="track"><i style="width:${x.pct}%;background:${ax.color}"></i></span>
+      <span class="desc">${desc}</span></div>`;
+  }).join("");
+  const all = example ? "" : `<details><summary>Alle ${list.length} Richtungen anzeigen (Anteil am Gesamtprofil)</summary><div class="all">${
+    list.map(x => `<div class="r"><span>${ax.cats[x.k][0]}</span><span class="t"><i style="width:${Math.round(x.share * 100 / list[0].share)}%;background:${ax.color}"></i></span><span class="v">${Math.round(x.share * 100)} %</span></div>`).join("")
+  }</div></details>`;
+  return `<div class="axis"><div class="axis-head"><h3>${ax.title}</h3><span class="clarity">${clarity}</span></div>${tops}${all}</div>`;
+}
+
+function summaryText(res) {
+  return `Mein ${CONFIG.meta?.title || "Berufskompass"}\n` + res.map(r => `${r.ax.title}: ` + r.top.map(x => `${r.ax.cats[x.k][0]} ${x.pct} %`).join(", ")).join("\n");
+}
+
+function renderResult() {
+  const res = scores(answers);
+  $("qBar").style.width = "100%";
+  $("result").innerHTML = `
+    <div class="panel">
+      <span class="section-label">Deine Auswertung</span>
+      <h1>Deine Hauptrichtungen</h1>
+      <p class="lead">Die Prozente zeigen, wie sich deine stärksten Richtungen untereinander verteilen. Ein gemischtes Profil ist normal – es zeigt, dass mehrere Wege zu dir passen.</p>
+    </div>
+    ${res.map(r => `<div class="panel">${axisHTML(r, false)}</div>`).join("")}
+    <div class="panel">
+      <h2>So geht es weiter</h2>
+      <ul class="steps">
+        <li><a href="https://www.arbeitsagentur.de/bildung/welche-ausbildung-welches-studium" target="_blank" rel="noopener">Check-U der Arbeitsagentur</a><span class="note">Kostenloser, wissenschaftlich entwickelter Test zu Fähigkeiten und Interessen, mit passenden Ausbildungen und Studiengängen.</span></li>
+        <li><a href="https://www.charakterstaerken.org" target="_blank" rel="noopener">VIA-Charakterstärkentest der Universität Zürich</a><span class="note">Zeigt deine 24 Charakterstärken – also <em>wie</em> du am besten arbeitest.</span></li>
+        <li><a href="https://www.mein-now.de" target="_blank" rel="noopener">mein NOW mit NewPlan</a><span class="note">Für den Fall, dass du schon gearbeitet hast und dich neu orientierst – auch Richtung Selbstständigkeit.</span></li>
+        <li><a href="https://www.arbeitsagentur.de/bildung/berufsberatung" target="_blank" rel="noopener">Berufsberatung der Arbeitsagentur</a><span class="note">Kostenloses Gespräch. Nimm diese Auswertung mit, Telefon <span style="user-select:all">0800 4 5555 00</span>.</span></li>
+      </ul>
+      <p class="note">Hinweis: Der Berufskompass ist eine Orientierungshilfe und kein geprüfter psychologischer Test. Er hilft, die eigenen Tendenzen zu sortieren und gezielt weiterzufragen.</p>
+      <div class="row">
+        <button class="btn" id="copyBtn" type="button">Ergebnis kopieren</button>
+        <button class="btn ghost" id="editBtn" type="button">Antworten ändern</button>
+        <button class="btn ghost" id="restartBtn" type="button">Neu starten</button>
+      </div>
+      <textarea id="copyArea" readonly hidden rows="4" style="width:100%;font:inherit"></textarea>
+      <span class="note" id="copyMsg" role="status"></span>
+    </div>`;
+  $("copyBtn").addEventListener("click", () => {
+    const txt = summaryText(res);
+    navigator.clipboard.writeText(txt).then(() => { $("copyMsg").textContent = "Ergebnis kopiert."; })
+      .catch(() => { const a = $("copyArea"); a.hidden = false; a.value = txt; a.select(); $("copyMsg").textContent = "Text markiert – mit Strg+C kopieren."; });
+  });
+  $("editBtn").addEventListener("click", () => { current = 0; renderQuestion(); show("quiz"); });
+  $("restartBtn").addEventListener("click", () => { answers = new Array(QUESTIONS.length).fill(null); current = 0; clearSave(); renderQuestion(); show("quiz"); });
+}
+
+function renderExample() {
+  if (!QUESTIONS.length) return;
+  const sample = QUESTIONS.map((q, i) => Math.min(i % q.options.length, q.options.length - 1));
+  const res = scores(sample);
+  $("exampleBox").innerHTML = `<p class="note">So sieht eine Auswertung aus (Beispielantworten):</p>` +
+    res.map(r => axisHTML(r, true)).join("");
+}
+
+function startQuiz() { answers = new Array(QUESTIONS.length).fill(null); current = 0; clearSave(); renderQuestion(); show("quiz"); }
+
+function wireIntro() {
+  $("startBtn").addEventListener("click", startQuiz);
+  $("backBtn").addEventListener("click", () => { if (current > 0) { current--; save(); renderQuestion(); } });
+  document.addEventListener("keydown", e => {
+    if ($("quiz").hidden) return;
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= QUESTIONS[current].options.length) choose(n - 1);
+  });
+
+  const saved = loadState();
+  if (saved && saved.answers.some(a => a !== null)) {
+    $("resumeBtn").hidden = false;
+    $("resumeBtn").textContent = `Fortsetzen (Frage ${Math.min(saved.current + 1, QUESTIONS.length)} von ${QUESTIONS.length})`;
+    $("resumeBtn").addEventListener("click", () => {
+      answers = saved.answers; current = Math.min(saved.current, QUESTIONS.length - 1);
+      if (answers.every(a => a !== null)) { renderResult(); show("result"); } else { renderQuestion(); show("quiz"); }
+    });
+  }
+
+  $("toggleImport").addEventListener("click", () => {
+    const box = $("importBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  });
+  $("importFile").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { $("importText").value = reader.result; };
+    reader.readAsText(file);
+  });
+  $("importBtn").addEventListener("click", () => {
+    const text = $("importText").value.trim();
+    if (!text) return;
+    try {
+      const cfg = JSON.parse(text);
+      if (!cfg.axes || !cfg.questions) throw new Error("Struktur unvollständig (axes/questions fehlen)");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
+      clearSave();
+      applyConfig(cfg);
+      $("importMsg").textContent = `Eigene Fragen geladen ✓ (${QUESTIONS.length} Fragen).`;
+      $("importBox").style.display = "none";
+    } catch (err) {
+      $("importMsg").textContent = "Fehler: " + err.message;
+    }
+  });
+}
+
+(async function init() {
+  try {
+    const cfg = await loadConfig();
+    applyConfig(cfg);
+    wireIntro();
+  } catch (err) {
+    $("intro").innerHTML = `<div class="panel"><h1>Fehler beim Laden</h1><p>${err.message}</p></div>`;
+  }
+})();
+</script>
+</body>
+</html>
