@@ -2,7 +2,7 @@
   "meta": {
     "title": "Berufskompass",
     "tag": "Orientierung für den Berufsstart",
-    "intro": "24 Fragen, jeweils eine Antwort. Am Ende siehst du deine zwei bis drei stärksten Richtungen mit Prozentwerten, auf drei Achsen.",
+    "intro": "24 Fragen in drei Bereichen. Bei manchen wählst du eine Antwort, bei anderen bringst du mehrere in eine Rangfolge. Am Ende siehst du deine zwei bis drei stärksten Richtungen mit Prozentwerten, auf drei Achsen.",
     "durationNote": "Dauer etwa 6 Minuten. Es gibt keine falschen Antworten – wähle, was am ehesten auf dich zutrifft, nicht was gut klingt."
   },
   "axes": [
@@ -116,8 +116,10 @@
   ],
   "questions": [
     {
-      "nr": 1,
+      "nr": "1.1",
+      "order": 1,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Was ist dir bei einer Stelle am wichtigsten?",
       "options": [
         {
@@ -151,8 +153,10 @@
       ]
     },
     {
-      "nr": 2,
+      "nr": "1.2",
+      "order": 2,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Wie gehst du mit Risiko um?",
       "options": [
         {
@@ -185,8 +189,10 @@
       ]
     },
     {
-      "nr": 3,
+      "nr": "1.3",
+      "order": 3,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Dein Einkommen soll …",
       "options": [
         {
@@ -220,8 +226,10 @@
       ]
     },
     {
-      "nr": 4,
+      "nr": "1.4",
+      "order": 4,
       "section": "Arbeitsweise & Werte",
+      "mode": "rank",
       "text": "Wie arbeitest du am liebsten?",
       "options": [
         {
@@ -257,8 +265,10 @@
       ]
     },
     {
-      "nr": 5,
+      "nr": "1.5",
+      "order": 5,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Regeln und Vorschriften …",
       "options": [
         {
@@ -292,8 +302,10 @@
       ]
     },
     {
-      "nr": 6,
+      "nr": "1.6",
+      "order": 6,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Ein Projekt läuft schief. Was tust du?",
       "options": [
         {
@@ -327,8 +339,10 @@
       ]
     },
     {
-      "nr": 7,
+      "nr": "1.7",
+      "order": 7,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Wie wichtig ist dir eine geregelte Arbeitszeit?",
       "options": [
         {
@@ -363,8 +377,10 @@
       ]
     },
     {
-      "nr": 8,
+      "nr": "1.8",
+      "order": 8,
       "section": "Arbeitsweise & Werte",
+      "mode": "rank",
       "text": "Wofür möchtest du später bekannt sein?",
       "options": [
         {
@@ -398,8 +414,10 @@
       ]
     },
     {
-      "nr": 9,
+      "nr": "1.9",
+      "order": 9,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Verantwortung für andere Menschen …",
       "options": [
         {
@@ -433,8 +451,10 @@
       ]
     },
     {
-      "nr": 10,
+      "nr": "1.10",
+      "order": 10,
       "section": "Arbeitsweise & Werte",
+      "mode": "single",
       "text": "Welcher Satz klingt am meisten nach dir?",
       "options": [
         {
@@ -469,8 +489,10 @@
       ]
     },
     {
-      "nr": 11,
+      "nr": "2.1",
+      "order": 11,
       "section": "Umfeld & Branche",
+      "mode": "rank",
       "text": "In welchem Umfeld fühlst du dich am wohlsten?",
       "options": [
         {
@@ -504,8 +526,10 @@
       ]
     },
     {
-      "nr": 12,
+      "nr": "2.2",
+      "order": 12,
       "section": "Umfeld & Branche",
+      "mode": "single",
       "text": "Wie groß soll dein Arbeitgeber sein?",
       "options": [
         {
@@ -539,8 +563,10 @@
       ]
     },
     {
-      "nr": 13,
+      "nr": "2.3",
+      "order": 13,
       "section": "Umfeld & Branche",
+      "mode": "rank",
       "text": "Was soll am Ende deiner Arbeit stehen?",
       "options": [
         {
@@ -574,8 +600,10 @@
       ]
     },
     {
-      "nr": 14,
+      "nr": "2.4",
+      "order": 14,
       "section": "Umfeld & Branche",
+      "mode": "rank",
       "text": "Welches Thema verfolgst du freiwillig in deiner Freizeit?",
       "options": [
         {
@@ -611,8 +639,10 @@
       ]
     },
     {
-      "nr": 15,
+      "nr": "2.5",
+      "order": 15,
       "section": "Umfeld & Branche",
+      "mode": "rank",
       "text": "Für wen möchtest du arbeiten?",
       "options": [
         {
@@ -646,8 +676,10 @@
       ]
     },
     {
-      "nr": 16,
+      "nr": "2.6",
+      "order": 16,
       "section": "Umfeld & Branche",
+      "mode": "rank",
       "text": "Welche Aufgabe reizt dich am meisten?",
       "options": [
         {
@@ -681,8 +713,10 @@
       ]
     },
     {
-      "nr": 17,
+      "nr": "2.7",
+      "order": 17,
       "section": "Umfeld & Branche",
+      "mode": "single",
       "text": "Wie wichtig ist dir, dass deine Arbeit einen gesellschaftlichen Sinn hat?",
       "options": [
         {
@@ -716,8 +750,10 @@
       ]
     },
     {
-      "nr": 18,
+      "nr": "2.8",
+      "order": 18,
       "section": "Umfeld & Branche",
+      "mode": "single",
       "text": "Wo siehst du dich in zehn Jahren?",
       "options": [
         {
@@ -752,8 +788,10 @@
       ]
     },
     {
-      "nr": 19,
+      "nr": "3.1",
+      "order": 19,
       "section": "Interessen & Begabungen",
+      "mode": "rank",
       "text": "Welches Schulfach lag dir am meisten?",
       "options": [
         {
@@ -793,8 +831,10 @@
       ]
     },
     {
-      "nr": 20,
+      "nr": "3.2",
+      "order": 20,
       "section": "Interessen & Begabungen",
+      "mode": "rank",
       "text": "Was fällt dir leicht?",
       "options": [
         {
@@ -833,8 +873,10 @@
       ]
     },
     {
-      "nr": 21,
+      "nr": "3.3",
+      "order": 21,
       "section": "Interessen & Begabungen",
+      "mode": "rank",
       "text": "Womit verbringst du gern mehrere Stunden am Stück?",
       "options": [
         {
@@ -868,8 +910,10 @@
       ]
     },
     {
-      "nr": 22,
+      "nr": "3.4",
+      "order": 22,
       "section": "Interessen & Begabungen",
+      "mode": "rank",
       "text": "Bei einem Gruppenprojekt übernimmst du meistens …",
       "options": [
         {
@@ -909,8 +953,10 @@
       ]
     },
     {
-      "nr": 23,
+      "nr": "3.5",
+      "order": 23,
       "section": "Interessen & Begabungen",
+      "mode": "single",
       "text": "Was würdest du am liebsten anderen vermitteln?",
       "options": [
         {
@@ -946,8 +992,10 @@
       ]
     },
     {
-      "nr": 24,
+      "nr": "3.6",
+      "order": 24,
       "section": "Interessen & Begabungen",
+      "mode": "rank",
       "text": "Welche Nachricht würde dich am meisten freuen?",
       "options": [
         {

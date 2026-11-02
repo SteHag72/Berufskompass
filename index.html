@@ -77,7 +77,14 @@ p { margin: 0; max-width: 65ch; }
 .opt .key { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
 .opt[aria-checked="true"] { border-color: var(--accent); background: var(--accent-soft); }
 .opt[aria-checked="true"] .key { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.opt[data-on="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.opt[data-on="true"] .key { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 500; }
+.opt.rank .key { border-style: dashed; }
+.opt.rank[data-on="true"] .key { border-style: solid; }
 .hint { font-size: 0.85rem; color: var(--muted); }
+.mode { font-size: 0.92rem; color: var(--muted); border-left: 3px solid var(--warm); padding-left: 10px; }
+.mode.rank { color: var(--ink); }
+.num { font-family: var(--font-mono); color: var(--muted); margin-right: 8px; font-weight: 500; }
 .axis { display: grid; gap: 14px; }
 .axis-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .clarity { font-size: 0.8rem; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
@@ -145,10 +152,14 @@ summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
     </div>
     <div class="section-label" id="qLabel"></div>
     <h2 id="qText"></h2>
+    <p class="mode" id="qMode"></p>
     <div class="opts" id="qOpts" role="radiogroup" aria-labelledby="qText"></div>
     <div class="row" style="justify-content:space-between">
-      <button class="btn ghost" id="backBtn" type="button">Zurück</button>
-      <span class="hint">Tipp: Tasten 1–5 wählen eine Antwort</span>
+      <div class="row">
+        <button class="btn ghost" id="backBtn" type="button">Zurück</button>
+        <button class="btn" id="nextBtn" type="button" hidden>Weiter</button>
+      </div>
+      <span class="hint" id="qHint">Tipp: Tasten 1–5 wählen eine Antwort</span>
     </div>
   </section>
 
@@ -199,7 +210,7 @@ async function loadConfig() {
 function applyConfig(cfg) {
   CONFIG = cfg;
   AXES = cfg.axes.map(ax => ({ id: ax.id, title: ax.title, color: ax.color, cats: ax.categories }));
-  QUESTIONS = [...cfg.questions].sort((a, b) => a.nr - b.nr);
+  QUESTIONS = [...cfg.questions].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   MAX = {};
   QUESTIONS.forEach(q => {
@@ -223,7 +234,7 @@ function applyConfig(cfg) {
     facts.appendChild(d);
   });
 
-  answers = new Array(QUESTIONS.length).fill(null);
+  answers = new Array(QUESTIONS.length).fill(null); // je Frage: Array der gewählten Options-Indizes in Rangfolge, oder null
   current = 0;
 }
 
@@ -233,46 +244,91 @@ function save() { try { localStorage.setItem(STATE_KEY, JSON.stringify({ answers
 function loadState() { try { const d = JSON.parse(localStorage.getItem(STATE_KEY) || "null"); if (d && Array.isArray(d.answers) && d.answers.length === QUESTIONS.length) return d; } catch (e) {} return null; }
 function clearSave() { try { localStorage.removeItem(STATE_KEY); } catch (e) {} }
 
-function renderQuestion() {
+const isRank = qi => QUESTIONS[qi].mode === "rank";
+
+function renderQuestion(focusIdx) {
   const q = QUESTIONS[current];
   const N = QUESTIONS.length;
-  $("qCount").textContent = `Frage ${current + 1} von ${N}`;
-  $("qSection").textContent = q.section || "";
+  const rank = isRank(current);
+  const sel = answers[current] || [];
+  $("qCount").textContent = `Frage ${q.nr}`;
+  $("qSection").textContent = `${current + 1} von ${N}`;
   $("qLabel").textContent = q.section || "";
   $("qText").textContent = q.text;
+  $("qMode").textContent = rank
+    ? "Mehrere möglich: Tippe die Antworten in der Reihenfolge an, wie gut sie passen – die treffendste zuerst. Eine Antwort genügt. Erneutes Antippen entfernt sie."
+    : "Wähle die eine Antwort, die am besten passt.";
+  $("qMode").className = rank ? "mode rank" : "mode";
+  $("qHint").textContent = rank ? "Tasten 1–5 tippen an, Enter = Weiter" : "Tipp: Tasten 1–5 wählen eine Antwort";
   $("qBar").style.width = `${(current / N) * 100}%`;
   $("backBtn").disabled = current === 0;
+  $("nextBtn").hidden = !rank;
+  $("nextBtn").disabled = sel.length === 0;
+  $("nextBtn").textContent = current === N - 1 ? "Auswerten" : "Weiter";
   const box = $("qOpts");
+  box.setAttribute("role", rank ? "group" : "radiogroup");
   box.innerHTML = "";
   q.options.forEach((opt, i) => {
+    const pos = sel.indexOf(i);
     const b = document.createElement("button");
-    b.type = "button"; b.className = "opt"; b.id = `q${current}o${i}`;
-    b.setAttribute("role", "radio");
-    b.setAttribute("aria-checked", answers[current] === i ? "true" : "false");
-    b.innerHTML = `<span class="key">${i + 1}</span><span></span>`;
+    b.type = "button"; b.className = rank ? "opt rank" : "opt"; b.id = `q${current}o${i}`;
+    b.dataset.on = pos >= 0 ? "true" : "false";
+    if (rank) b.setAttribute("aria-pressed", pos >= 0 ? "true" : "false");
+    else { b.setAttribute("role", "radio"); b.setAttribute("aria-checked", pos >= 0 ? "true" : "false"); }
+    const key = rank ? (pos >= 0 ? String(pos + 1) : "") : String(i + 1);
+    b.innerHTML = `<span class="key" aria-hidden="true">${key}</span><span></span>`;
     b.lastChild.textContent = opt.label;
+    if (rank) b.setAttribute("aria-label", pos >= 0 ? `${opt.label}, Platz ${pos + 1}` : opt.label);
     b.addEventListener("click", () => choose(i));
     box.appendChild(b);
   });
+  if (focusIdx !== undefined) { const f = $(`q${current}o${focusIdx}`); if (f) f.focus(); }
+}
+
+function logAnswerForQuestion(qi) {
+  const q = QUESTIONS[qi];
+  const sel = answers[qi];
+  if (!sel || !sel.length) return;
+  const text = isRank(qi)
+    ? sel.map((oi, idx) => `${idx + 1}. ${q.options[oi].label}`).join(" | ")
+    : q.options[sel[0]].label;
+  logToForm(q.nr, q.text, text);
 }
 
 function choose(i) {
-  answers[current] = i;
+  if (isRank(current)) {
+    const sel = (answers[current] || []).slice();
+    const p = sel.indexOf(i);
+    if (p >= 0) sel.splice(p, 1); else sel.push(i);
+    answers[current] = sel.length ? sel : null;
+    save();
+    renderQuestion(i);
+    return;
+  }
+  answers[current] = [i];
   save();
-  const q = QUESTIONS[current];
-  logToForm(q.nr, q.text, q.options[i].label);
-  [...$("qOpts").children].forEach((b, j) => b.setAttribute("aria-checked", j === i ? "true" : "false"));
-  setTimeout(() => {
-    if (current < QUESTIONS.length - 1) { current++; save(); renderQuestion(); }
-    else { renderResult(); show("result"); }
-  }, 180);
+  logAnswerForQuestion(current);
+  [...$("qOpts").children].forEach((b, j) => { b.dataset.on = j === i ? "true" : "false"; b.setAttribute("aria-checked", j === i ? "true" : "false"); });
+  setTimeout(next, 180);
 }
+
+function next() {
+  if (!answers[current]) return;
+  if (isRank(current)) logAnswerForQuestion(current);
+  if (current < QUESTIONS.length - 1) { current++; save(); renderQuestion(); }
+  else { renderResult(); show("result"); }
+}
+
+// Platzgewichte 4 : 2 : 1 : 0,5 …, je Frage auf 100 % normiert – jede Frage zählt gleich viel
+const RANK_BASE = [4, 2, 1, 0.5, 0.25];
+function rankWeights(k) { const b = RANK_BASE.slice(0, k); const s = b.reduce((x, y) => x + y, 0); return b.map(x => x / s); }
 
 function scores(ans) {
   const raw = {};
   ans.forEach((a, qi) => {
-    if (a === null) return;
-    Object.entries(QUESTIONS[qi].options[a].weights || {}).forEach(([k, v]) => { raw[k] = (raw[k] || 0) + v; });
+    if (!a || !a.length) return;
+    const w = rankWeights(a.length);
+    a.forEach((oi, r) => Object.entries(QUESTIONS[qi].options[oi].weights || {}).forEach(([k, v]) => { raw[k] = (raw[k] || 0) + v * w[r]; }));
   });
   return AXES.map(ax => {
     const list = Object.keys(ax.cats).map(k => ({ k, fit: (raw[k] || 0) / (MAX[k] || 1) })).sort((a, b) => b.fit - a.fit);
@@ -291,22 +347,22 @@ function scores(ans) {
 
 function axisHTML(r, example) {
   const { ax, top, list, clarity } = r;
-  const tops = top.map(x => {
+  const tops = top.map((x, idx) => {
     const [name, desc, holl] = ax.cats[x.k];
     return `<div class="winner">
-      <span class="name">${name}${holl ? `<span class="holland">${holl}</span>` : ""}</span>
+      <span class="name"><span class="num">${idx + 1}.</span>${name}${holl ? `<span class="holland">${holl}</span>` : ""}</span>
       <span class="pct">${x.pct} %</span>
       <span class="track"><i style="width:${x.pct}%;background:${ax.color}"></i></span>
       <span class="desc">${desc}</span></div>`;
   }).join("");
   const all = example ? "" : `<details><summary>Alle ${list.length} Richtungen anzeigen (Anteil am Gesamtprofil)</summary><div class="all">${
-    list.map(x => `<div class="r"><span>${ax.cats[x.k][0]}</span><span class="t"><i style="width:${Math.round(x.share * 100 / list[0].share)}%;background:${ax.color}"></i></span><span class="v">${Math.round(x.share * 100)} %</span></div>`).join("")
+    list.map((x, idx) => `<div class="r"><span><span class="num">${idx + 1}.</span>${ax.cats[x.k][0]}</span><span class="t"><i style="width:${Math.round(x.share * 100 / list[0].share)}%;background:${ax.color}"></i></span><span class="v">${Math.round(x.share * 100)} %</span></div>`).join("")
   }</div></details>`;
   return `<div class="axis"><div class="axis-head"><h3>${ax.title}</h3><span class="clarity">${clarity}</span></div>${tops}${all}</div>`;
 }
 
 function summaryText(res) {
-  return `Mein ${CONFIG.meta?.title || "Berufskompass"}\n` + res.map(r => `${r.ax.title}: ` + r.top.map(x => `${r.ax.cats[x.k][0]} ${x.pct} %`).join(", ")).join("\n");
+  return `Mein ${CONFIG.meta?.title || "Berufskompass"}\n` + res.map(r => `${r.ax.title}: ` + r.top.map((x, idx) => `${idx + 1}. ${r.ax.cats[x.k][0]} ${x.pct} %`).join(", ")).join("\n");
 }
 
 function renderResult() {
@@ -363,8 +419,10 @@ function startQuiz() {
 function wireIntro() {
   $("startBtn").addEventListener("click", startQuiz);
   $("backBtn").addEventListener("click", () => { if (current > 0) { current--; save(); renderQuestion(); } });
+  $("nextBtn").addEventListener("click", next);
   document.addEventListener("keydown", e => {
     if ($("quiz").hidden) return;
+    if (e.key === "Enter" && isRank(current) && answers[current] && !(e.target instanceof HTMLButtonElement)) { next(); return; }
     const n = parseInt(e.key, 10);
     if (n >= 1 && n <= QUESTIONS[current].options.length) choose(n - 1);
   });

@@ -11,11 +11,20 @@ Die Fragen werden aus `config.json` geladen.
 Jede Antwort sowie das Endergebnis werden anonym an ein Google Form gesendet
 (`fetch(..., {mode:"no-cors"})`), das in ein Google Sheet schreibt:
 - **Timestamp**: einheitlicher Start-Zeitpunkt der Befragung (ISO 8601), gleich für alle Zeilen eines Durchlaufs
-- **Frage-Nr**: Nummer der Frage (1–24) bzw. Achsen-Nr (1–3) für Ergebniszeilen
+- **Frage-Nr**: Nummer der Frage im Format `Bereich.Nummer` (z. B. `1.4`, `2.3`) bzw. Achsen-Nr (1–3) für Ergebniszeilen
 - **Frage**: Fragetext bzw. Name der Ergebnis-Richtung (z. B. „Wissenschaftler/in")
-- **Antwort**: gewählte Options-Antwort bzw. Prozentwert (z. B. „37%")
+- **Antwort**: gewählte Options-Antwort (bei Rangfolge-Fragen `1. Option A | 2. Option C`) bzw. Prozentwert (z. B. „37%")
 
 Die Form-Action-URL und Entry-IDs stehen in `index.html` (`FORM_ACTION`, `FORM_FIELDS`).
+
+## Fragetypen
+Jede Frage hat ein `mode`-Feld in `config.json`:
+- **`single`**: eine Antwort auswählen (Klick → sofort weiter)
+- **`rank`**: mehrere Antworten in Rangfolge anklicken (treffendste zuerst), „Weiter"-Button oder Enter zum Bestätigen
+
+Die Nummerierung (`nr`, z. B. `1.1`, `1.2`, `2.1`) gruppiert die Fragen nach Themenbereich
+(1 = Arbeitsweise & Werte, 2 = Umfeld & Branche, 3 = Interessen & Begabungen). Die Reihenfolge
+der Anzeige folgt dem separaten Feld `order` (1–24).
 
 ## Eigene Fragen / Config anpassen
 Auf der Startseite über **„Eigene Fragen laden …“** lässt sich eine eigene `config.json`
